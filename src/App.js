@@ -20,13 +20,13 @@ class App extends React.Component {
   onLogin = (username, password) => {
     axios.post(`${baseUrl}/user/login`, { username, password }).then(res => {
       this.setState({ isAuthorized: true, token: res.data.token })
-    })
+    }).catch(err => alert('Username/Password Not Correct!!!'))
   }
 
   onSignUp = (username, password) => {
     axios.post(`${baseUrl}/user/sign-up`, { username, password }).then(res => {
       this.setState({ isAuthorized: true, token: res.data.token })
-    }).catch(err=>alert('Username already Taken'))
+    }).catch(err => alert('Username already Taken'))
   }
 
   onLogout = () => {
