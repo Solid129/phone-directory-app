@@ -1,9 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
 import Login from './Login/login';
-import Contact from './Contacts/contact';
-import Directory from './Contacts/directory';
-import { useState } from 'react';
+import Directory from './PhoneDirectory/directory';
 import axios from 'axios';
 import React from "react";
 

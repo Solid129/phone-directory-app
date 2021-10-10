@@ -1,5 +1,5 @@
 import Contact from './contact';
-import ContactDetail from './contact-detail';
+import ContactDetail from './contact-detail-view';
 import './contact.css';
 import axios from 'axios';
 import React from 'react';
