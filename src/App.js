@@ -3,6 +3,8 @@ import Login from './Login/login';
 import Directory from './PhoneDirectory/directory';
 import axios from 'axios';
 import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const baseUrl = 'https://phone-directory-service.herokuapp.com';
 
@@ -38,7 +40,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App" >
+      <div className="App">
         {!this.state.isAuthorized && <Login onLogin={this.onLogin} onSignUp={this.onSignUp} />}
         { this.state.isAuthorized && <Directory token={this.state.token} onLogout={this.onLogout} />}
       </div >

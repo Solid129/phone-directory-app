@@ -1,8 +1,7 @@
 import { useRef, useState } from 'react';
-import './login.css';
 
 const isEmpty = (value) => value.trim() === '';
-const isValidPassword = (value) => value.length >= 3;
+const isValidPassword = (value) => value.length >= 6;
 
 const Login = (props) => {
   const [formInputsValidity, setFormInputsValidity] = useState({
@@ -41,30 +40,28 @@ const Login = (props) => {
   };
 
   return (
-    <div className="loginFormDiv">
-      <form className="loginForm">
-        <div>
-          <label htmlFor='username'>Username</label><br />
-          <input type='text' id='username' ref={usernameInputRef} className="username" />
-          {!formInputsValidity.username && <p style={{ color: 'red', fontSize: '15px' }}>Please enter a valid username!</p>}
+    <form>
+      <div className="mb-3">
+        <label htmlFor="username" className="form-label">Username</label>
+        <input type="text" className="form-control" id="username" aria-describedby="usernameHelp" ref={usernameInputRef} />
+        {!formInputsValidity.username && <div id="usernameHelp" className="form-text">Username Not Valid</div>}
+      </div>
+      <div className="mb-3">
+        <label htmlFor="password" className="form-label">Password</label>
+        <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" ref={passwordInputRef} />
+        {!formInputsValidity.password && <div id="passwordHelp" className="form-text danger">Password Must be atleast 6 characters.</div>}
+      </div>
+      <div className="container">
+        <div className="row justify-content-evenly">
+          <div className="col-3">
+            <button id="login" type="button" className="btn btn-primary" onClick={confirmHandler}>Login</button>
+          </div>
+          <div className="col-3">
+            <button id="signup" type="button" className="btn btn-primary" onClick={confirmHandler}>SignUp</button>
+          </div>
         </div>
-        <div>
-          <label htmlFor='password'>Password</label><br />
-          <input type='password' id='password' ref={passwordInputRef} className="password" />
-          {!formInputsValidity.password &&
-            <div>
-              <p style={{ color: 'red', fontSize: '15px' }}>Please enter a valid password!<br />
-              Your password must:
-              Contain at least 3 characters</p>
-            </div>
-          }
-        </div>
-        <div style={{ marginTop: 10 }}>
-          <button id="login" style={{ height: 30, width: 60, textAlign: 'center', display: 'inline-block', marginRight: '10%' }} onClick={confirmHandler}>{"LogIn"}</button>
-          <button id="signup" style={{ height: 30, width: 60, display: 'inline-block', marginLeft: '10%' }} onClick={confirmHandler} title='Add New Contact'>{"SignUp"}</button>
-        </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 

@@ -28,6 +28,16 @@ const NewContact = (props) => {
     landlineNumber: true
   });
 
+  const [formInputs, setFormInputs] = useState({
+    firstName: props.firstName ?? null,
+    middleName: props.middleName ?? null,
+    lastName: props.lastName ?? null,
+    email: props.email ?? null,
+    mobileNumber: props.mobileNumber ?? null,
+    landlineNumber: props.landlineNumber ?? null,
+    notes: props.notes ?? null
+  });
+
   const firstNameInputRef = useRef();
   const middleNameInputRef = useRef();
   const lastNameInputRef = useRef();
@@ -40,6 +50,7 @@ const NewContact = (props) => {
   const image = {
     url: ''
   };
+
 
   function readImage() {
     const canvas = canvasRef.current;
@@ -97,6 +108,7 @@ const NewContact = (props) => {
       return;
     } else {
       props.onSubmit({
+        _id: props._id,
         firstName: enteredFirstName,
         middleName: enteredMiddleName,
         lastName: enteredLastName,
@@ -109,51 +121,68 @@ const NewContact = (props) => {
     }
   };
 
+  const onValueChange = (event) => {
+    const newformInputs = { ...formInputs };
+    newformInputs[event.target.id] = event.target.value
+    setFormInputs({ newformInputs })
+  }
+
+  const onCancel = (event) => {
+    event.preventDefault();
+    props.onCancel();
+  }
+
   return (
     <div>
-      <form onSubmit={confirmHandler}>
+      <form action="">
         <div>
-          <label htmlFor='FirstName'>FirstName</label><br />
-          <input type='text' id='firstName' ref={firstNameInputRef} />
-          {!formInputsValidity.firstName && <p style={{ color: 'red', fontSize: '15px' }}>Please enter a valid FirstName!</p>}
+          <label className="form-label" htmlFor='FirstName'>FirstName</label><br />
+          <input className="form-control" type='text' id='firstName' ref={firstNameInputRef} value={formInputs.firstName} onChange={onValueChange} />
+          {!formInputsValidity.firstName && <p className="form-text">Please enter a valid FirstName!</p>}
         </div>
         <div>
-          <label htmlFor='MiddleName'>MiddleName</label><br />
-          <input type='text' id='middleName' ref={middleNameInputRef} />
+          <label className="form-label" htmlFor='MiddleName'>MiddleName</label><br />
+          <input className="form-control" type='text' id='middleName' ref={middleNameInputRef} value={formInputs.middleName} onChange={onValueChange} />
         </div>
         <div>
-          <label htmlFor='LastName'>LastName</label><br />
-          <input type='text' id='lastName' ref={lastNameInputRef} />
-          {!formInputsValidity.lastName && <p style={{ color: 'red', fontSize: '15px' }}>Please enter a valid LastName!</p>}
+          <label className="form-label" htmlFor='LastName'>LastName</label><br />
+          <input className="form-control" type='text' id='lastName' ref={lastNameInputRef} value={formInputs.lastName} onChange={onValueChange} />
+          {!formInputsValidity.lastName && <p className="form-text">Please enter a valid LastName!</p>}
         </div>
         <div>
-          <label htmlFor='Photo' style={{ cursor: 'pointer' }}>Photo</label><br />
-          <p><input type="file" accept="image/jpeg, image/png" name="image" id="file" ref={photoInputRef} onChange={readImage} /></p>
-          {!formInputsValidity.photo && <p style={{ color: 'red', fontSize: '15px' }}>File Size should be smaller than 500kb!</p>}
+          <label className="form-label" htmlFor='Photo' style={{ cursor: 'pointer' }}>Photo</label><br />
+          <input className="form-control" type="file" accept="image/jpeg, image/png" name="image" id="file" ref={photoInputRef} onChange={readImage} />
+          {!formInputsValidity.photo && <p className="form-text">File Size should be smaller than 500kb!</p>}
           <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
         </div>
         <div>
-          <label htmlFor='Email'>Email</label><br />
-          <input type='text' id='email' ref={emailInputRef} />
-          {!formInputsValidity.email && <p style={{ color: 'red', fontSize: '15px' }}>Please enter a valid Email!</p>}
+          <label className="form-label" htmlFor='Email'>Email</label><br />
+          <input className="form-control" type='text' id='email' ref={emailInputRef} value={formInputs.email} onChange={onValueChange} />
+          {!formInputsValidity.email && <p className="form-text">Please enter a valid Email!</p>}
         </div>
         <div>
-          <label htmlFor='Mobile'>Mobile</label><br />
-          <input type='text' id='mobile' ref={mobileInputRef} />
-          {!formInputsValidity.mobileNumber && <p style={{ color: 'red', fontSize: '15px' }}>Please enter a valid Mobile!</p>}
+          <label className="form-label" htmlFor='Mobile'>Mobile</label><br />
+          <input className="form-control" type='text' id='mobileNumber' ref={mobileInputRef} value={formInputs.mobileNumber} onChange={onValueChange} />
+          {!formInputsValidity.mobileNumber && <p className="form-text">Please enter a valid Mobile!</p>}
         </div>
         <div>
-          <label htmlFor='Landline'>LandLine</label><br />
-          <input type='text' id='landline' ref={landlineInputRef} />
-          {!formInputsValidity.landlineNumber && <p style={{ color: 'red', fontSize: '15px' }}>Please enter a valid LandLine!</p>}
+          <label className="form-label" htmlFor='Landline'>LandLine</label><br />
+          <input className="form-control" type='text' id='landlineNumber' ref={landlineInputRef} value={formInputs.landlineNumber} onChange={onValueChange} />
+          {!formInputsValidity.landlineNumber && <p className="form-text">Please enter a valid LandLine!</p>}
         </div>
         <div>
-          <label htmlFor='Notes'>Notes</label><br />
-          <input type='textArea' id='notes' ref={notesInputRef} />
+          <label className="form-label" htmlFor='Notes'>Notes</label><br />
+          <input className="form-control" type='textArea' id='notes' ref={notesInputRef} value={formInputs.notes} onChange={onValueChange} />
         </div>
-        <img src=""></img>
-        <div>
-          <button>Submit</button>
+        <div className="container">
+          <div className="row">
+            <div className="col">
+              <button className="btn btn-primary" onClick={confirmHandler}>Submit</button>
+            </div>
+            <div className="col">
+              <button className="btn btn-primary" onClick={onCancel}>Cancel</button>
+            </div>
+          </div>
         </div>
       </form>
     </div>

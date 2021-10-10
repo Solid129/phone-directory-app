@@ -17,7 +17,8 @@ class Directory extends React.Component {
         key: 'name',
         ascending: true
       },
-      search: ''
+      search: '',
+      editRequest: ''
     }
   }
 
@@ -57,16 +58,42 @@ class Directory extends React.Component {
     }
   }
 
-  onToggleButton = () => {
-    this.setState({ newContactTab: !this.state.newContactTab, contactView: null })
+  onToggleFormButton = () => {
+    this.setState({ newContactTab: true, contactView: null })
+  }
+
+  onToggleViewButton = () => {
+    this.setState({ newContactTab: false, contactView: null, editRequest: '' })
   }
 
   onNewContactSubmit = (contact) => {
+    delete contact._id;
     axios.post(`${baseUrl}/contacts/add`, contact, {
       headers: {
         Authorization: 'Bearer ' + this.props.token
       }
-    }).then(res => this.setState({ newContactTab: !this.state.newContactTab }))
+    }).then(res => this.setState({ newContactTab: false }))
+  }
+
+  onEditContact = (id) => {
+    this.setState({ editRequest: id })
+  }
+
+  onEditContactSubmit = (contact) => {
+    const id = contact._id;
+    delete contact._id;
+    axios.patch(`${baseUrl}/contacts/${id}/update`, contact, {
+      headers: {
+        Authorization: 'Bearer ' + this.props.token
+      }
+    }).then(res => {
+      this.setState({ newContactTab: false, editRequest: '' })
+      axios.get(`${baseUrl}/contacts`, {
+        headers: {
+          Authorization: `Bearer ${this.props.token}`
+        }
+      }).then(res => this.setState({ contacts: res.data }))
+    })
   }
 
   onSortToggle = (key) => {
@@ -93,7 +120,7 @@ class Directory extends React.Component {
     const searchKeyword = this.state.search;
 
     if (searchKeyword.length > 0) {
-      contacts = contacts.filter(c => String(c.firstName).toLowerCase().includes(searchKeyword) || String(c.middleName)?.toLowerCase().includes(searchKeyword) || String(c.lastName).toLowerCase().includes(searchKeyword) || String(c.mobileNumber)?.toLowerCase().includes(searchKeyword))
+      contacts = contacts.filter(c => String(c.firstName + " " + c.middleName + " " + c.lastName).toLowerCase().includes(searchKeyword) || String(c.mobileNumber)?.toLowerCase().includes(searchKeyword))
     }
     if (this.state.sortBy.key === 'name') {
       if (this.state.sortBy.ascending) {
@@ -108,19 +135,31 @@ class Directory extends React.Component {
         contacts.sort((b, a) => String(a.createdAt).localeCompare(b.createdAt));
       }
     }
-    const mapped = contacts.map((c, i) => <Contact {...c} key={i} onContactView={this.onContactView} onDelete={this.deleteContact} showButton={true} showTotalViews={false} />)
+    const mapped = contacts.map((c, i) => <Contact {...c} key={i} onView={this.onContactView} onDelete={this.deleteContact} onEdit={this.onEditContact} showButton={true} showTotalViews={false} />)
     const res = this.state.contactView !== null
       ? <ContactDetail {...this.state.contactView} onClick={this.onContactView} />
       : this.state.newContactTab === true
-        ? <NewContact onSubmit={this.onNewContactSubmit} />
-        : mapped
+        ? <NewContact onSubmit={this.onNewContactSubmit} onCancel={this.onToggleViewButton} />
+        : this.state.editRequest.length > 0 ? <NewContact onSubmit={this.onEditContactSubmit} onCancel={this.onToggleViewButton} {...this.state.contacts.filter(c => c._id === this.state.editRequest)[0]} />
+          : mapped;
     return (<div>
       <div>
-        <button style={{ height: 60, width: 60, textAlign: 'center', display: 'inline-block', marginRight: '10%' }} onClick={this.props.onLogout}>{"Logout"}</button>
-        <input type="text" id="search" ref={this.searchRef} onChange={this.setSearchKeyWord} />
-        <button style={{ height: 60, width: 60, display: 'inline-block', marginLeft: '10%' }} onClick={this.onToggleButton} title='Add New Contact'>{this.state.newContactTab ? 'Close' : 'New'}</button>
-        <button onClick={() => this.onSortToggle('name')}>Sort By Name</button>
-        <button onClick={() => this.onSortToggle('date')}>Sort By Date</button>
+        <nav className="navbar navbar-light" style={{ backgroundColor: "#e3f2fd" }}>
+          <div className="container-fluid">
+            <a className="navbar-brand">My Contacts</a>
+            <form className="d-flex">
+              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" ref={this.searchRef} onChange={this.setSearchKeyWord} />
+              <button className="btn btn-outline-danger" onClick={this.props.onLogout}>Logout</button>
+            </form>
+          </div>
+        </nav>
+        <div className="container">
+          <div className="row">
+            <button className="col btn btn-outline-success" onClick={() => this.onSortToggle('name')}>Sort By Name</button>
+            <button className="col btn btn-outline-success" onClick={() => this.onSortToggle('date')}>Sort By Date</button>
+            <button className="col btn btn-outline-success" onClick={this.onToggleFormButton}>Add New Contact</button>
+          </div>
+        </div>
       </div>
       {res}
     </div>)
