@@ -1,0 +1,21 @@
+.Contact {
+  height: fit-content;
+  background-color: lightcyan;
+}
+
+.ContactPhoto {
+  width:100px;
+  height:100px;
+  display:inline-block;
+  margin-right: 10px;
+}
+
+.ContactDetails {
+  width:33%;
+  display:inline-block;
+  border-left: 10px;
+}
+
+.ContactDetailsBody {
+  text-align: left;
+}

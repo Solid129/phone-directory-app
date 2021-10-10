@@ -1,0 +1,22 @@
+.loginFormDiv {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  
+  transform: translate(-50%, -50%);
+}
+.loginForm {
+  height: 150px;
+  width: 300px;
+}
+
+.username {
+  height: 20px;
+  width: 90%;
+}
+
+.password {
+  height: 20px;
+  width: 90%;
+}
+
