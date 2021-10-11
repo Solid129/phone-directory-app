@@ -1,4 +1,4 @@
-import './contact.css';
+// Single contact view component
 
 const Contact = (props) => {
   return (

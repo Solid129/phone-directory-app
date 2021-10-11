@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 
+// validation checks helper function for input values
 const isEmpty = (value) => value.trim() === '';
+
 const isValidEmail = (email) => {
   var regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regex.test(String(email).toLowerCase());
@@ -19,6 +21,8 @@ const isValidPhoto = (photo) => {
 }
 
 const NewContact = (props) => {
+
+  // state for validity check of form inputs
   const [formInputsValidity, setFormInputsValidity] = useState({
     firstName: true,
     lastName: true,
@@ -28,16 +32,19 @@ const NewContact = (props) => {
     landlineNumber: true
   });
 
+  // state for maintaining input data
   const [formInputs, setFormInputs] = useState({
     firstName: props.firstName ?? null,
     middleName: props.middleName ?? null,
     lastName: props.lastName ?? null,
     email: props.email ?? null,
+    image: null,
     mobileNumber: props.mobileNumber ?? null,
     landlineNumber: props.landlineNumber ?? null,
     notes: props.notes ?? null
   });
 
+  // setting referance to all input fields
   const firstNameInputRef = useRef();
   const middleNameInputRef = useRef();
   const lastNameInputRef = useRef();
@@ -46,28 +53,20 @@ const NewContact = (props) => {
   const mobileInputRef = useRef();
   const landlineInputRef = useRef();
   const notesInputRef = useRef();
-  const canvasRef = useRef();
-  const image = {
-    url: ''
-  };
 
 
+  // checking if image is uploaded and setting image url as string
   function readImage() {
-    const canvas = canvasRef.current;
-    var context = canvas.getContext("2d");
     if (photoInputRef.current.files && photoInputRef.current.files[0]) {
       var FR = new FileReader();
       FR.onload = function (e) {
-        var img = new Image();
-        img.onload = function () {
-          context.drawImage(img, 0, 0);
-        };
-        image.url = (e.target.result);
+        setFormInputs({ ...formInputs,image: e.target.result })
       };
       FR.readAsDataURL(photoInputRef.current.files[0]);
     }
   }
 
+  //checking validation of form inputs and call add or update function
   const confirmHandler = (event) => {
     event.preventDefault();
 
@@ -112,7 +111,7 @@ const NewContact = (props) => {
         firstName: enteredFirstName,
         middleName: enteredMiddleName,
         lastName: enteredLastName,
-        photo: image.url,
+        photo: formInputs.image,
         email: enteredEmail,
         mobileNumber: enteredMobile,
         landlineNumber: enteredLandline,
@@ -121,12 +120,16 @@ const NewContact = (props) => {
     }
   };
 
+
+  // on input value change update the formInputs
   const onValueChange = (event) => {
-    const newformInputs = { ...formInputs };
+    const newformInputs = JSON.parse(JSON.stringify(formInputs));
     newformInputs[event.target.id] = event.target.value
-    setFormInputs({ newformInputs })
+    setFormInputs(newformInputs)
   }
 
+
+  // on Cancel button click handler
   const onCancel = (event) => {
     event.preventDefault();
     props.onCancel();
@@ -134,7 +137,7 @@ const NewContact = (props) => {
 
   return (
     <div>
-      <form action="">
+      <form>
         <div>
           <label className="form-label" htmlFor='FirstName'>FirstName</label><br />
           <input className="form-control" type='text' id='firstName' ref={firstNameInputRef} value={formInputs.firstName} onChange={onValueChange} />
@@ -153,7 +156,6 @@ const NewContact = (props) => {
           <label className="form-label" htmlFor='Photo' style={{ cursor: 'pointer' }}>Photo</label><br />
           <input className="form-control" type="file" accept="image/jpeg, image/png" name="image" id="file" ref={photoInputRef} onChange={readImage} />
           {!formInputsValidity.photo && <p className="form-text">File Size should be smaller than 500kb!</p>}
-          <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
         </div>
         <div>
           <label className="form-label" htmlFor='Email'>Email</label><br />

@@ -5,7 +5,7 @@ const LineGraph = (props) => {
   let labels = [];
   const datasets = [
     {
-      label: 'Views',
+      label: 'Views in Last Seven Days',
       fill: false,
       lineTension: 0.5,
       backgroundColor: 'rgba(75,192,192,1)',

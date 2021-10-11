@@ -3,7 +3,10 @@ import { useRef, useState } from 'react';
 const isEmpty = (value) => value.trim() === '';
 const isValidPassword = (value) => value.length >= 6;
 
-const Login = (props) => {
+
+// Auth component to show login form
+
+const Auth = (props) => {
   const [formInputsValidity, setFormInputsValidity] = useState({
     username: true,
     password: true,
@@ -65,4 +68,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default Auth;
