@@ -1,8 +1,11 @@
 # Phone Directory App
 
-### Commands to Run
+### Installation
 
 * Clone this project.
+
+> git clone https://github.com/Solid129/phone-directory-app
+
 * Install dependencies of the project
 
 > npm i
@@ -13,9 +16,8 @@
 
 ### Introduction
 
-  + phone directory app to add, view and edit contacts.
-  + username and password to authenticate for viewing contacts.
-  + Included sort by name, sort by date and searching on mobile/landline number and name
+* a phone directory application to add, view and edit contacts with username and password authentication.
+* features include sorting by name, date and searching on mobile/landline number, name.
 
 Model used for Contact is:
 
