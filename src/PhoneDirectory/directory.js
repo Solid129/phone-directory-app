@@ -132,7 +132,7 @@ class Directory extends React.Component {
 
     // filter contacts based on search keyword
     if (searchKeyword.length > 0) {
-      contacts = contacts.filter(c => String(c.firstName + " " + c.middleName + " " + c.lastName).toLowerCase().includes(searchKeyword) || String(c.mobileNumber)?.toLowerCase().includes(searchKeyword))
+      contacts = contacts.filter(c => String(c.firstName + " " + c.middleName + " " + c.lastName).toLowerCase().includes(searchKeyword) || String(c.mobileNumber)?.toLowerCase().includes(searchKeyword) || String(c.landlineNumber)?.toLowerCase().includes(searchKeyword))
     }
     // sort the contacts based on sortBy key
     if (this.state.sortBy.key === 'name') {

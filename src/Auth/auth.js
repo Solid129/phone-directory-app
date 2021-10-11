@@ -52,7 +52,7 @@ const Auth = (props) => {
       <div className="mb-3">
         <label htmlFor="password" className="form-label">Password</label>
         <input type="password" className="form-control" id="password" aria-describedby="passwordHelp" ref={passwordInputRef} />
-        {!formInputsValidity.password && <div id="passwordHelp" className="form-text danger">Password Must be atleast 6 characters.</div>}
+        {!formInputsValidity.password && <div id="passwordHelp" className="form-text danger">Password must be atleast 6 characters.</div>}
       </div>
       <div className="container">
         <div className="row justify-content-evenly">
