@@ -8,7 +8,7 @@
 
 * Install dependencies of the project
 
-> npm i
+> npm install
 
 * Run the project using
 
@@ -16,8 +16,8 @@
 
 ### Introduction
 
-* a phone directory application to add, view and edit contacts with username and password authentication.
-* features include sorting by name, date and searching on mobile/landline number, name.
+* A phone directory application to add, view and edit contacts with username and password authentication.
+* Features include sorting by name, date and searching on mobile/landline number, name.
 
 Model used for Contact is:
 
