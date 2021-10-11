@@ -31,20 +31,6 @@ class Directory extends React.Component {
     }).then(res => this.setState({ contacts: res.data }))
   }
 
-  // update state with user contacts on component update
-  // while checking if contacts updated
-  componentDidUpdate() {
-    axios.get(`${baseUrl}/contacts`, {
-      headers: {
-        Authorization: `Bearer ${this.props.token}`
-      }
-    }).then(res => {
-      if (this.state.contacts.length !== res.data.length) {
-        this.setState({ contacts: res.data })
-      }
-    })
-  }
-
   // on contact details view click handler
   onContactView = (id) => {
     if (id === -1) {
@@ -62,12 +48,12 @@ class Directory extends React.Component {
 
   // toggle to show new contact addition form
   onToggleFormButton = () => {
-    this.setState({ newContactTab: true, contactView: null })
+    this.setState({ newContactTab: true })
   }
 
   // toggle to hide contact addition form
   onToggleViewButton = () => {
-    this.setState({ newContactTab: false, contactView: null, editRequest: '' })
+    this.setState({ newContactTab: false, editRequest: '' })
   }
 
   // send contact data to server to save contact
@@ -77,7 +63,7 @@ class Directory extends React.Component {
       headers: {
         Authorization: 'Bearer ' + this.props.token
       }
-    }).then(res => this.setState({ newContactTab: false }))
+    }).then(res => this.setState({ newContactTab: false, contacts: res.data }))
   }
 
   // on edit button click handler 
@@ -95,12 +81,7 @@ class Directory extends React.Component {
         Authorization: 'Bearer ' + this.props.token
       }
     }).then(res => {
-      this.setState({ newContactTab: false, editRequest: '' })
-      axios.get(`${baseUrl}/contacts`, {
-        headers: {
-          Authorization: `Bearer ${this.props.token}`
-        }
-      }).then(res => this.setState({ contacts: res.data }))
+      this.setState({ newContactTab: false, editRequest: '', contacts: res.data })
     })
   }
 
@@ -118,7 +99,7 @@ class Directory extends React.Component {
       headers: {
         Authorization: 'Bearer ' + this.props.token
       }
-    }).then(res => this.setState({ newContactTab: false, contactView: null }))
+    }).then(res => this.setState({ newContactTab: false, contactView: null, contacts: res.data }))
   }
 
   // set input search word
